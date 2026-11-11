@@ -176,8 +176,8 @@ const Menu = {
 /* ---------- Lint's shop ---------- */
 const Shop = {
   active: false, idx: 0, msg: "", stock: [], who: "lint",
-  open(stock, who = "lint", msg) {
-    this.active = true; this.idx = 0; this.who = who;
+  open(stock, who = "lint", msg, bye) {
+    this.active = true; this.idx = 0; this.who = who; this.bye = bye || null;
     this.stock = stock || ["starcandy", "mosstea", "patchkit", "letteropener", "hardcover"];
     this.msg = msg || "Take your time, kid. Nothing here's going anywhere. That's kind of the point.";
   },
@@ -188,7 +188,7 @@ const Shop = {
     if (Input.hit("down")) { this.idx = (this.idx + 1) % n; Sound.sfx("move"); }
     if (Input.hit("cancel") || (Input.hit("ok") && this.idx === this.stock.length)) {
       this.active = false; Sound.sfx("back");
-      Dialog.open([L(this.who, this.who === "lint" ? "Come back if you lose anything! Or find anything! Same thing, really." : "Come back soon! Or a copy of you can. Either's fine.")]);
+      Dialog.open([L(this.who, this.bye ? this.bye : this.who === "lint" ?"Come back if you lose anything! Or find anything! Same thing, really." : "Come back soon! Or a copy of you can. Either's fine.")]);
       return;
     }
     if (Input.hit("ok")) {
