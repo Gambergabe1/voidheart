@@ -337,3 +337,6 @@ NPC_DRAW.palimpsest = (cx, by, t, u = 2) => MON_DRAW.palimpsest(cx, by, t, { sp:
 
 /* link every region together last */
 E3.applyLinks();
+/* Episode 3 only opens once every region is present */
+EPISODES[2].playable = ["e3h_bedroom", "e3m_gutter", "e3f_gate", "e3e_lobby", "e3p_scraped", "e3_heart"].every(r => ROOMS[r]);
+if (!EPISODES[2].playable) EPISODES[2].sub = "In development. Coming soon.";
