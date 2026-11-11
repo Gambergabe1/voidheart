@@ -36,7 +36,7 @@ const ACHIEVEMENTS = [
   { id: "restored", name: "RESTORED", desc: "Reach Episode 2's Restored ending.", ep: 2 },
   { id: "struck", name: "STRUCK THROUGH", desc: "Reach Episode 2's Struck Through ending.", ep: 2, secret: true },
   // across loops
-  { id: "archivist", name: "Archivist", desc: "Find all eight Lost Pages.", ep: 0 },
+  { id: "archivist", name: "Archivist", desc: "Find every Lost Page.", ep: 0 },
   { id: "looper", name: "Familiar Crease", desc: "Finish Episode 1 three times.", ep: 0 },
   { id: "complete", name: "The Archive Remembers You", desc: "See every ending in every episode.", ep: 0 }
 ];
@@ -148,7 +148,7 @@ const AchScene = {
   const endStart = Ending.start;
   Ending.start = function (type, info) {
     endStart.call(this, type, info);
-    Ach.unlock({ pacifist: "remembered", neutral: "left", void: "unwritten", restored: "restored", struck: "struck" }[type]);
+    Ach.unlock({ pacifist: "remembered", neutral: "left", void: "unwritten", restored: "restored", struck: "struck" }[type] || type);
     Ach.scan();
   };
 

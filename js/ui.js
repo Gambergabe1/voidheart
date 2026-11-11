@@ -134,10 +134,12 @@ const Menu = {
       const ids = Object.keys(LOST_PAGES);
       frame(206, 24, 410, 380);
       txt(`LOST PAGES  ${Memory.data.pages.length}/${ids.length}`, 230, 36, "#be6cff", 26);
+      const rh = ids.length > 9 ? 24 : 36, fs = ids.length > 9 ? 22 : 26;
+      const roman = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI"];
       ids.forEach((id, i) => {
-        const got = Memory.hasPage(id), y = 76 + i * 36;
-        if (i === this.item) drawHeart(232, y + 14, "#ff2b45", 2);
-        txt(got ? LOST_PAGES[id].title.replace("Lost Page ", "") : `${["I", "II", "III", "IV", "V", "VI", "VII", "VIII"][i]}: ???  (Episode ${LOST_PAGES[id].ep})`, 252, y, got ? "#fff" : "#555", 26);
+        const got = Memory.hasPage(id), y = 70 + i * rh;
+        if (i === this.item) drawHeart(232, y + fs / 2, "#ff2b45", 2);
+        txt(got ? LOST_PAGES[id].title.replace("Lost Page ", "") : `${roman.at(i)}: ???  (Episode ${LOST_PAGES[id].ep})`, 252, y, got ? "#fff" : "#555", fs);
       });
     }
     if (this.state === "items" || this.state === "itemAct") {

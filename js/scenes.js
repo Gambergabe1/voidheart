@@ -86,12 +86,13 @@ const Title = {
       });
     }
     const E = Memory.data.endings;
-    [1, 2].forEach((ep, r) => {
-      const ks = endingsOf(ep), y = 402 + r * 22;
-      txt(`EP${ep}`, 40, y, "#444", 22);
+    const epRows = EPISODES.filter(ep => ep.playable).map(ep => ep.n);
+    epRows.forEach((ep, r) => {
+      const ks = endingsOf(ep), y = 394 + r * 18;
+      txt(`EP${ep}`, 40, y, "#444", 19);
       ks.forEach((k, i) => {
         const inf = ENDING_INFO[k], x = 150 + i * 170;
-        txt(E[k] ? inf.name : "? ? ?", x, y, E[k] ? inf.col : "#333", 22, "center");
+        txt(E[k] ? inf.name : "? ? ?", x, y, E[k] ? inf.col : "#333", 19, "center");
       });
     });
     const meta = [];
@@ -108,9 +109,9 @@ const Title = {
 const Episodes = {
   start() { Scene.set("episodes"); this.idx = 0; this.mode = "list"; this.sub = 0; this.msg = ""; this.t = 0; },
   status(n) {
-    const e = Memory.data.eps[n];
-    if (n === 3) return { lock: true, text: "COMING SOON", col: "#555" };
-    if (n === 2 && !Memory.data.eps[1]) return { lock: true, text: "LOCKED - finish Episode 1 first", col: "#555" };
+    const e = Memory.data.eps[n], def = EPISODES[n - 1];
+    if (!def || !def.playable) return { lock: true, soon: true, text: "COMING SOON", col: "#555" };
+    if (n > 1 && !Memory.data.eps[n - 1]) return { lock: true, text: `LOCKED - finish Episode ${n - 1} first`, col: "#555" };
     if (hasSave(n)) return { text: "IN PROGRESS", col: "#57dbff" };
     if (e) return { text: `COMPLETE - ${ENDING_INFO[e.ending].name}`, col: ENDING_INFO[e.ending].col };
     return { text: "NOT STARTED", col: "#9a9aa4" };
@@ -134,7 +135,7 @@ const Episodes = {
     if (Input.hit("cancel")) { Sound.sfx("back"); Title.start(); return; }
     if (Input.hit("ok")) {
       const n = EPISODES[this.idx].n, st = this.status(n);
-      if (st.lock) { Sound.sfx("buzz"); this.msg = n === 3 ? "Episode 3 isn't written yet." : "Reach any ending in Episode 1 to open this."; return; }
+      if (st.lock) { Sound.sfx("buzz"); this.msg = st.soon ? `Episode ${n} isn't written yet.` : `Reach any ending in Episode ${n - 1} to open this.`; return; }
       if (hasSave(n)) { this.mode = "choose"; this.sub = 0; Sound.sfx("select"); return; }
       this.go(n, false);
     }
@@ -143,15 +144,15 @@ const Episodes = {
     ctx.fillStyle = "#000"; ctx.fillRect(0, 0, CW, CH);
     txt("EPISODES", 320, 18, "#f6f6f2", 48, "center");
     EPISODES.forEach((ep, i) => {
-      const y = 82 + i * 104, st = this.status(ep.n), sel = i === this.idx;
-      frame(60, y, 520, 92, sel ? "#ffd84a" : st.lock ? "#333" : "#777", 3);
-      if (sel) drawHeart(84, y + 46, "#ff2b45", 2);
-      txt(`EPISODE ${ep.n}`, 108, y + 8, st.lock ? "#444" : "#9a9aa4", 22);
-      txt(st.lock && ep.n === 3 ? "? ? ?" : ep.title, 108, y + 28, st.lock ? "#555" : "#fff", 34);
-      txt(st.text, 560, y + 8, st.col, 20, "right");
-      txt(st.lock && ep.n === 3 ? "" : ep.sub, 108, y + 62, "#777", 20);
+      const y = 70 + i * 86, st = this.status(ep.n), sel = i === this.idx;
+      frame(60, y, 520, 78, sel ? "#ffd84a" : st.lock ? "#333" : "#777", 3);
+      if (sel) drawHeart(84, y + 39, "#ff2b45", 2);
+      txt(`EPISODE ${ep.n}`, 108, y + 6, st.lock ? "#444" : "#9a9aa4", 20);
+      txt(st.soon ? "? ? ?" : ep.title, 108, y + 24, st.lock ? "#555" : "#fff", 30);
+      txt(st.text, 560, y + 6, st.col, 19, "right");
+      txt(st.soon ? "" : ep.sub, 108, y + 52, "#777", 19);
     });
-    if (this.msg) txt(this.msg, 320, 404, "#ff9d3f", 24, "center");
+    if (this.msg) txt(this.msg, 320, 418, "#ff9d3f", 22, "center");
     txt("Z select · X back", 320, 448, "#555", 20, "center");
     if (this.mode === "choose") {
       frame(200, 170, 240, 120);
@@ -406,7 +407,9 @@ const Ending = {
     this.type = type; this.info = info || {}; this.ep = G.ep || 1;
     const carry = this.ep === 1
       ? { spared: [...G.spared], killed: [...G.killed], wt: G.wt, exp: G.exp, gold: G.gold, vantaAlive: !G.killed.includes("vanta") }
-      : { restored: [...G.restored], named: !!this.info.named };
+      : { restored: [...G.restored], named: !!this.info.named, spared: [...G.spared], killed: [...G.killed],
+          wt: G.wt, exp: G.exp, gold: G.gold, vantaAlive: !!(G.carry && G.carry.vantaAlive),
+          stet: !!G.flags.stetDone, shredder: G.flags.shredder || null };
     Memory.record(type, this.ep, carry); delSave(this.ep);
     this.pages = this.build();
     this.i = 0; this.t = 0; this.phase = "pages"; this.scroll = 0;
@@ -592,8 +595,9 @@ const Ending = {
 const EpisodeEnd = {
   start(ep, type) {
     Scene.set("epend"); this.ep = ep; this.type = type; this.t = 0; this.idx = 0;
-    this.opts = ep === 1 ? ["CONTINUE TO EPISODE 2", "RETURN TO TITLE"] : ["RETURN TO TITLE"];
-    Music.play(ep === 1 ? "well" : "title"); Fade.a = 1; Fade.in(null, 1);
+    const nx = EPISODES[ep];
+    this.opts = nx && nx.playable ? [`CONTINUE TO EPISODE ${nx.n}`, "RETURN TO TITLE"] : ["RETURN TO TITLE"];
+    Music.play((nx && nx.music) || "title"); Fade.a = 1; Fade.in(null, 1);
   },
   update(dt) {
     this.t += dt;
@@ -601,7 +605,7 @@ const EpisodeEnd = {
     if (Input.hit("up") || Input.hit("down")) { this.idx = (this.idx + 1) % this.opts.length; Sound.sfx("move"); }
     if (Input.hit("ok")) {
       Sound.sfx("select");
-      if (this.opts[this.idx].startsWith("CONTINUE")) Fade.out(() => Intro.start(2), 1.5);
+      if (this.opts[this.idx].startsWith("CONTINUE")) Fade.out(() => Intro.start(this.ep + 1), 1.5);
       else Fade.out(() => Title.start(), 1.5);
     }
   },
@@ -615,12 +619,9 @@ const EpisodeEnd = {
     ctx.fillStyle = "#be6cff"; ctx.fillRect(220, 216, 200, 2);
     if (nx) {
       txt(`NEXT: EPISODE ${nx.n}`, 320, 232, "#777", 24, "center");
-      txt(nx.title, 320, 258, nx.n === 3 ? "#555" : "#fff", 34, "center");
-      const tease = this.ep === 1
-        ? "Under the Archive there is another place. Things don't go there to be forgotten."
-        : "Up in the world above, someone has started writing down things that never happened.";
-      drawTyped(tease, Math.floor(this.t * 40), 110, 300, 420, 22, "#9a9aa4");
-      if (nx.n === 3) txt("COMING SOON", 320, 356, "#ff9d3f", 26, "center");
+      txt(nx.playable ? nx.title : "? ? ?", 320, 258, nx.playable ? "#fff" : "#555", 34, "center");
+      drawTyped(nx.tease || "", Math.floor(this.t * 40), 110, 300, 420, 22, "#9a9aa4");
+      if (!nx.playable) txt("COMING SOON", 320, 356, "#ff9d3f", 26, "center");
     }
     if (this.t > 1.2) this.opts.forEach((s, i) => {
       const y = 392 + i * 34, sel = i === this.idx;

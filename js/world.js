@@ -208,7 +208,7 @@ const World = {
       else if (e.k === "item") drawItemGlint(ex, ey - 4, t);
       else if (e.k === "page") drawLostPage(ex, ey, t);
       else if (e.k === "sign") drawSign(ex, ey);
-      else if (NPC_DRAW[e.id]) NPC_DRAW[e.id](ex, ey, t, 2);
+      else if (NPC_DRAW[e.sprite || e.id]) NPC_DRAW[e.sprite || e.id](ex, ey, t, 2);
       ctx.globalAlpha = 1;
     }
     // grey out voided areas
@@ -232,6 +232,9 @@ const World = {
   }
 };
 
+/* custom tiles: TILE_DRAW[ch] = (x, y, tx, ty, pal, t, W, h) => {...}; set .floor = false to skip the floor under it.
+   Make a custom tile solid with SOLID.add(ch). */
+const TILE_DRAW = {};
 function roomPuzzle(def) { return (def && def.puzzle) || { flag: "puzzle1", key: "runes" }; }
 function drawTile(ch, x, y, tx, ty, pal, t, area, W) {
   const h = hash(tx, ty);
@@ -239,6 +242,12 @@ function drawTile(ch, x, y, tx, ty, pal, t, area, W) {
     ctx.fillStyle = ((tx + ty) & 1) ? pal.floor : (pal.alt || pal.floor);
     ctx.fillRect(x, y, TILE, TILE);
   };
+  const hook = TILE_DRAW[ch];
+  if (hook) {
+    if (hook.floor !== false) floor();
+    hook(x, y, tx, ty, pal, t, W, h);
+    return;
+  }
   if (ch === " ") {
     if (area === "bridge" && h < .09) {
       ctx.fillStyle = `rgba(255,255,255,${.25 + .75 * Math.abs(Math.sin(t * .8 + h * 60))})`;

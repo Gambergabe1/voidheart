@@ -3,9 +3,11 @@
    VOIDHEART — Episode 2: THE UNDERPRINT  (+ Lost Pages lore)
    ============================================================ */
 const EPISODES = [
-  { n: 1, title: "THE LAST PAGE", sub: "Fall into the Archive. Find the way back out." },
-  { n: 2, title: "THE UNDERPRINT", sub: "Something under the Archive is erasing it." },
-  { n: 3, title: "THE MARGINALIA", sub: "Coming soon." }
+  { n: 1, title: "THE LAST PAGE", sub: "Fall into the Archive. Find the way back out.", playable: true, music: "title" },
+  { n: 2, title: "THE UNDERPRINT", sub: "Something under the Archive is erasing it.", playable: true, music: "well",
+    tease: "Under the Archive there is another place. Things don't go there to be forgotten." },
+  { n: 3, title: "THE MARGINALIA", sub: "Coming soon.", playable: false,
+    tease: "Up in the world above, someone has started writing down things that never happened." }
 ];
 
 /* ---------- Lost Pages: the Archive's hidden history ---------- */
@@ -19,7 +21,7 @@ const LOST_PAGES = {
   p7: { ep: 2, title: "Lost Page VII: The Reasoning", text: ["REDACT's reasoning was simple. Waiting in the dark to be remembered is cruel.", "If everything is erased, nothing ever has to wait again."] },
   p8: { ep: 2, title: "Lost Page VIII: The Name", text: ["Under the black bar there are three letters. The first is S. The last is L.", "The middle one is O. It was the first light in the dark, and its name was SOL."] }
 };
-const allPagesFound = () => Object.keys(LOST_PAGES).every(k => Memory.hasPage(k));
+const allPagesFound = () => Object.keys(LOST_PAGES).filter(k => LOST_PAGES[k].ep <= 2).every(k => Memory.hasPage(k));
 
 /* Ep1 page placements + foreshadowing */
 ROOMS.m_hall.ents.push({ k: "page", tx: 12, ty: 7, page: "p1" });
