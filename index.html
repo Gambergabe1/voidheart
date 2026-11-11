@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>VOIDHEART</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none}
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;
+       font-family:"VT323","Courier New",monospace;
+       background:radial-gradient(circle at 50% 30%,rgba(91,55,140,.14),transparent 45%),#000}
+  #screen{display:block;background:#000;image-rendering:pixelated;image-rendering:crisp-edges;
+          box-shadow:0 0 0 3px #111,0 0 40px rgba(120,70,255,.14)}
+  #touch{display:none;width:100%;max-width:640px;box-sizing:border-box;padding:12px 18px;
+         justify-content:space-between;align-items:center;user-select:none;-webkit-user-select:none}
+  body.touch #touch{display:flex}
+  .dpad{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,54px);gap:4px}
+  .tb{background:#0d0d12;border:2px solid #44444f;color:#ccc;font:24px "VT323",monospace;
+      display:flex;align-items:center;justify-content:center;border-radius:10px}
+  .tb.on{background:#26232f;border-color:#ffd84a;color:#ffd84a}
+  .acts{display:flex;gap:10px;align-items:center}
+  .acts .tb{width:64px;height:64px;border-radius:50%}
+</style>
+</head>
+<body>
+<canvas id="screen" width="640" height="480"></canvas>
+<div id="touch">
+  <div class="dpad">
+    <span></span><div class="tb" data-code="ArrowUp">▲</div><span></span>
+    <div class="tb" data-code="ArrowLeft">◀</div><span></span><div class="tb" data-code="ArrowRight">▶</div>
+    <span></span><div class="tb" data-code="ArrowDown">▼</div><span></span>
+  </div>
+  <div class="acts">
+    <div class="tb" data-code="KeyC">C</div>
+    <div class="tb" data-code="KeyX">X</div>
+    <div class="tb" data-code="KeyZ">Z</div>
+  </div>
+</div>
+<script src="js/core.js"></script>
+<script src="js/data.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/episode1b.js"></script>
+<script src="js/episode2.js"></script>
+<script src="js/episode2b.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/world.js"></script>
+<script src="js/patterns.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/scenes.js"></script>
+<script src="js/achievements.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
