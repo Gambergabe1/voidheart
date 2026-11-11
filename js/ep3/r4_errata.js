@@ -687,7 +687,7 @@
         { k: "npc", id: "e_addendum", tx: 13, ty: 3, talk: () => [
           L("e_addendum", "Supplies! I'm Addendum. Snacks for long hearings. And one more thing."),
           L("e_addendum", "...And one more thing: everything here is certified edible. In triplicate.", {
-            after: () => Shop.open(["e_coffee", "e_bun", "e_toast"], "e_addendum", "Coffee, buns, toast. And one more thing: the coffee is from 1952. It's been reheated with great care.") })] },
+            after: () => Shop.open(["e_coffee", "e_bun", "e_toast"], "e_addendum", "Coffee, buns, toast. And one more thing: the coffee is from 1952. It's been reheated with great care.", "Your receipt has been filed in triplicate. Good day.") })] },
         { k: "save", tx: 16, ty: 3 },
         { k: "sign", tx: 15, ty: 9, text: () => ["* A portrait of the Citation in a gilt frame.", "* It's been corrected so many times, the face is mostly red ink.", "* The eyes, under all of it, look very tired."] },
         noteLobby]

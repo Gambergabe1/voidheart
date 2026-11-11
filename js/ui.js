@@ -188,16 +188,16 @@ const Shop = {
     if (Input.hit("down")) { this.idx = (this.idx + 1) % n; Sound.sfx("move"); }
     if (Input.hit("cancel") || (Input.hit("ok") && this.idx === this.stock.length)) {
       this.active = false; Sound.sfx("back");
-      Dialog.open([L(this.who, this.bye ? this.bye : this.who === "lint" ?"Come back if you lose anything! Or find anything! Same thing, really." : "Come back soon! Or a copy of you can. Either's fine.")]);
+      Dialog.open([L(this.who, this.bye ? this.bye : this.who === "lint" ?"Come back if you lose anything! Or find anything! Same thing, really." : this.who === "lintcopy" ? "Come back soon! Or a copy of you can. Either's fine." : "Thanks for stopping by. Come back any time.")]);
       return;
     }
     if (Input.hit("ok")) {
       const id = this.stock[this.idx], it = ITEMS[id];
       const unique = it.type !== "heal";
-      if (unique && this.owned(id)) { this.msg = "You've already got one of those. I only had the one."; Sound.sfx("back"); }
-      else if (G.gold < it.price) { this.msg = "Ah... not enough scraps. I'd give it to you, but I'm a lint. I have bills."; Sound.sfx("back"); }
-      else if (G.inv.length >= 8) { this.msg = "Your pockets are full! Even I can't fit in there."; Sound.sfx("back"); }
-      else { G.gold -= it.price; G.inv.push(id); Sound.sfx("item"); this.msg = pick(["Thanks! It was lost, now it's found.", "Good choice. Previous owner barely used it. Probably.", "Sold! Don't tell me if you lose it. I'll find out."]); }
+      if (unique && this.owned(id)) { this.msg = this.who === "lint" ? "You've already got one of those. I only had the one." : "You've already got one of those."; Sound.sfx("back"); }
+      else if (G.gold < it.price) { this.msg = this.who === "lint" ? "Ah... not enough scraps. I'd give it to you, but I'm a lint. I have bills." : "You don't have enough scraps for that one."; Sound.sfx("back"); }
+      else if (G.inv.length >= 8) { this.msg = this.who === "lint" ? "Your pockets are full! Even I can't fit in there." : "Your pockets are full. Use or drop something first."; Sound.sfx("back"); }
+      else { G.gold -= it.price; G.inv.push(id); Sound.sfx("item"); this.msg = this.who === "lint" || this.who === "lintcopy" ? pick(["Thanks! It was lost, now it's found.", "Good choice. Previous owner barely used it. Probably.", "Sold! Don't tell me if you lose it. I'll find out."]) : pick(["Thank you!", "Good choice.", "It's yours."]); }
     }
   },
   draw(t) {
