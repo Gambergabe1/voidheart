@@ -3,7 +3,7 @@
    VOIDHEART — main loop
    ============================================================ */
 const SCENES = {
-  title: Title, ach: AchScene, episodes: Episodes, epend: EpisodeEnd, intro: Intro, world: World, battle: Battle, trans: Trans, gameover: GameOver, ending: Ending
+  title: Title, ach: AchScene, journal: Journal, epstats: EpStats, episodes: Episodes, epend: EpisodeEnd, intro: Intro, world: World, battle: Battle, trans: Trans, gameover: GameOver, ending: Ending
 };
 let last = performance.now(), clock = 0;
 function loop(now) {

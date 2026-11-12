@@ -71,9 +71,9 @@ const Title = {
       bmp(HEART_BROKEN_R, { X: "#5a5a5a" }, 320 + 4, 196, 5);
     } else drawHeart(320, 216, "#ff2b45", s);
     this.opts.forEach((o, i) => {
-      const y = 252 + i * 30, sel = i === this.idx && !this.confirm;
-      if (sel) drawHeart(320 - 100, y + 14, "#ff2b45", 2);
-      txt(o, 320, y, sel ? "#ffd84a" : "#fff", 32, "center");
+      const y = 248 + i * 27, sel = i === this.idx && !this.confirm;
+      if (sel) drawHeart(320 - 100, y + 13, "#ff2b45", 2);
+      txt(o, 320, y, sel ? "#ffd84a" : "#fff", 29, "center");
     });
     if (this.confirm) {
       frame(110, 260, 420, 130);
@@ -95,12 +95,8 @@ const Title = {
         txt(E[k] ? inf.name : "? ? ?", x, y, E[k] ? inf.col : "#333", 19, "center");
       });
     });
-    const meta = [];
-    if (Memory.data.runs > 0) meta.push(`loops remembered: ${Memory.data.runs}`);
-    if (Memory.data.pages.length) meta.push(`lost pages: ${Memory.data.pages.length}/${Object.keys(LOST_PAGES).length}`);
-    if (typeof Ach !== "undefined") meta.push(`achievements: ${Ach.count()}/${ACHIEVEMENTS.length}`);
-    if (meta.length) txt(meta.join("   ·   "), 320, 378, "#555", 20, "center");
-    txt("Z confirm · X cancel · C menu · M mute · F fullscreen", 320, 448, "#555", 20, "center");
+    if (typeof Jn !== "undefined" && Jn.percent() > 0) txt(`${Jn.percent()}% complete`, 600, 448, "#be6cff", 20, "right");
+    txt("Z confirm · X cancel · C menu · M mute · F fullscreen", 40, 448, "#555", 20);
     if (!document.hasFocus() && Math.floor(this.t * 2) % 2) txt("click the screen to play", 320, 250, "#ffd84a", 26, "center");
   }
 };
