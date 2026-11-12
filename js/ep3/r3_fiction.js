@@ -876,7 +876,7 @@ Object.assign(F3, {
       L("juni", "At night I whistle. Same four notes. I don't know where they're from. The fourth one always comes out wrong."),
       { t: "* You know that tune. Juni taught it to you, sitting on a fence, the summer you were nine.", ch: ["Whistle it", "Not yet"], on: i => {
         if (i !== 0) return [L("juni", "That's okay. I can wait. Apparently I'm great at waiting.")];
-        f.f_r_whistle = true;
+        f.f_r_whistle = true; Sound.sfx("whistle");
         return [
           "* You put two fingers in your mouth. The wrong way. The way Juni always said was wrong.",
           "* You whistle. Three notes come out fine. The fourth one cracks.",

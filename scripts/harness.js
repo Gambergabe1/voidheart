@@ -153,7 +153,19 @@ function validate(ctx, prefix) {
       for (const [n, f] of Object.entries(d.acts || {})) if (typeof f !== 'function') out.push('monster ' + mid + ': act ' + n + ' not a function');
       if (!d.check && !d.checkFn) out.push('monster ' + mid + ': no check text');
     }
-    for (const [k, s] of Object.entries(SONGS)) for (const tr of s.tracks) for (const tok of tr.n.trim().split(/\\s+/)) if (tok !== '-' && tok !== '.' && !noteFreq(tok)) out.push('song ' + k + ': bad note ' + tok);
+    for (const [k, s] of Object.entries(SONGS)) {
+      const lens = [];
+      for (const tr of s.tracks) {
+        const toks = tr.n.trim().split(/\\s+/); lens.push(toks.length);
+        for (const tok of toks) {
+          if (tok === '-' || tok === '.') continue;
+          if (tr.w === 'drums') { if (!'ksh'.includes(tok)) out.push('song ' + k + ': bad drum ' + tok); continue; }
+          for (const n of tok.split('+')) if (!noteFreq(n)) out.push('song ' + k + ': bad note ' + tok);
+        }
+      }
+      const mx = Math.max(...lens);
+      for (const l of lens) if (mx % l) out.push('song ' + k + ': track of ' + l + ' steps does not fit the longest (' + mx + ')');
+    }
     return { rooms: ids.length, problems: out };
   })()`);
 }

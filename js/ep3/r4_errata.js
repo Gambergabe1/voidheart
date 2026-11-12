@@ -20,7 +20,7 @@
       { w: "triangle", v: .06, n: "D3 - A2 - D3 - A2 - C3 - G2 - C3 - A2 - Bb2 - F2 - G2 - A2 - D3 - - - - - - - D3 - A2 - F3 - A2 - G2 - D3 - Bb2 - G2 - F2 - C3 - A2 - A2 - D3 - - - - - - -" },
       { w: "sine", v: .02, n: "A5 - - - - - - - . . . . . . . . G5 - - - - - - - . . . . . . . ." }] },
     e_trial: { bpm: 132, tracks: [
-      { w: "square", v: .022, n: "D5 D5 . F5 . D5 A5 . G5 . F5 . E5 . C#5 . D5 D5 . F5 . A5 D6 . C6 . Bb5 . A5 . . . D5 D5 . F5 . D5 A5 . Bb5 . A5 . G5 . F5 . E5 F5 . E5 . D5 C#5 . D5 . . . . . ." },
+      { w: "square", v: .022, n: "D5 D5 . F5 . D5 A5 . G5 . F5 . E5 . C#5 . D5 D5 . F5 . A5 D6 . C6 . Bb5 . A5 . . . D5 D5 . F5 . D5 A5 . Bb5 . A5 . G5 . F5 . E5 F5 . E5 . D5 C#5 . D5 . . . . . . ." },
       { w: "triangle", v: .075, n: "D2 D3 D2 D3 D2 D3 D2 D3 Bb1 Bb2 Bb1 Bb2 A1 A2 A1 A2 D2 D3 D2 D3 D2 D3 D2 D3 G1 G2 A1 A2 D2 D3 D2 D3" },
       { w: "sawtooth", v: .008, n: "A4 - - - - - - - F4 - - - - - - - E4 - - - - - - - A4 - - - - - - -" }] }
   });

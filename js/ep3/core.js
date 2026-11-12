@@ -125,7 +125,7 @@ Object.assign(SPEAKERS, {
 });
 Object.assign(SONGS, {
   hollow: { bpm: 88, tracks: [
-    { w: "triangle", v: .05, n: "G4 - B4 - D5 - B4 - C5 - A4 - - - B4 - G4 - E4 - G4 - A4 - - - - - - -" },
+    { w: "triangle", v: .05, n: "G4 - B4 - D5 - B4 - C5 - A4 - - - - - B4 - G4 - E4 - G4 - A4 - - - - - - -" },
     { w: "sine", v: .065, n: "G2 - - - D3 - - - C3 - - - D3 - - - E2 - - - C3 - - - D3 - - - D3 - - -" },
     { w: "square", v: .008, n: ". . G5 . . . B5 . . . A5 . . . F#5 ." }] },
   e3intro: { bpm: 70, tracks: [
